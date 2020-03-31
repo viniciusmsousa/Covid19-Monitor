@@ -19,9 +19,13 @@ usethis::use_package("dplyr")
 usethis::use_package("tidyr")
 usethis::use_package("shiny")
 usethis::use_package("ggplot2")
+usethis::use_package("shinythemes")
+use_package("leaflet")
+use_package("geobr")
+use_package("shinycssloaders")
 ## Add modules ----
 ## Create a module infrastructure in R/
-golem::add_module(name = "") # Name of the module
+golem::add_module(name = "Brazil_Monitor") # Name of the module
 
 
 ## Add helper functions ----

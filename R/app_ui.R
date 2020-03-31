@@ -9,11 +9,14 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    fluidPage(
-      h1("covid19")
+    navbarPage(
+      title = "Covid-19 by Vinicius M. Sousa",id = "covid19",
+      tabPanel(title = "Brazil Monitor",
+               mod_Brazil_Monitor_ui("Brazil_Monitor_ui_1")
     )
   )
-}
+  )
+} 
 
 #' Add external Resources to the Application
 #' 
