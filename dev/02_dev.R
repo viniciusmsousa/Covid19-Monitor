@@ -20,9 +20,12 @@ usethis::use_package("tidyr")
 usethis::use_package("shiny")
 usethis::use_package("ggplot2")
 usethis::use_package("shinythemes")
-use_package("leaflet")
-use_package("geobr")
-use_package("shinycssloaders")
+usethis::use_package("leaflet")
+usethis::use_package("geobr")
+
+usethis::use_package("shinycssloaders")
+usethis::use_package("plotly")
+usethis::use_package("utils")
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module(name = "Brazil_Monitor") # Name of the module

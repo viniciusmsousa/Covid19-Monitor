@@ -1,7 +1,7 @@
 #' Title
 #'
-#' @param df 
-#' @param ln_confirmed 
+#' @param df Data Frame Returned from getBrazilCovid19Data()  
+#' @param ln_confirmed Logical
 #'
 #' @return
 #' @export
@@ -9,10 +9,9 @@
 #' @import dplyr
 #' @import ggplot2
 #' @import plotly
-#'
 plot_confirmed_per_million <- function(df,ln_confirmed=F){
   out <- tryCatch({
-    
+    requireNamespace("dplyr")
     print("Start data transformation")
     df %>%
       filter(place_type=="state") %>% 
@@ -70,16 +69,17 @@ plot_confirmed_per_million <- function(df,ln_confirmed=F){
       ggplot(aes(x=.data$n_day,y=.data$confirmed_per_million,color=.data$state))+
       geom_line(size=0.8)+
       geom_point(size=2)+
-      # Plot titles and Labels
-      # ggtitle(label = "Covid-19 Spread in Brazilian States",
-      #         subtitle = "Normalized by Million of Habitants.")+
-      xlab("Nº of Days Since First Confirmed Case Per Million Habitant")+
+      #Plot titles and Labels
+      ggtitle(label = "Covid-19 Spread in Brazilian States",
+              subtitle = "Normalized by Million of Habitants.")+
+      xlab("Number of Days Since First Confirmed Case Per Million Habitant")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
       ylab(ifelse(test = ln_confirmed==T,yes = "Ln of Confirmed Cases Per Million Habitant",no = "Confirmed Cases Per Million Habitant"))+
       theme_minimal()+
       theme(
         axis.title.x = element_text(face = "bold",
-                                    size = 12),
+                                    size = 12,
+                                    hjust = 0),
         axis.title.y = element_text(face = "bold",
                                     size = 12),
         title = element_text(face = "bold"),

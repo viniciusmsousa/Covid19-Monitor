@@ -8,15 +8,15 @@
 #' @export
 #'
 #' @import dplyr
+#' @import utils
 getBrazilCovid19Data <- function(url){
   out <- tryCatch({
-    require(dplyr)
     # Casos Covid-19
     tmp <- tempfile()
-    download.file(url,tmp)
+    utils::download.file(url,tmp)
     
     #covid-19 br
-    read.csv(
+    utils::read.csv(
       gzfile(tmp),
       header=TRUE,
       stringsAsFactors=FALSE) %>% 
@@ -25,7 +25,7 @@ getBrazilCovid19Data <- function(url){
     df_covid19BR
   },
   error = function(cond){
-    print("Erro na função getBrazilData()")
+    print("Error in function getBrazilData()")
     message(cond)
   })
 }

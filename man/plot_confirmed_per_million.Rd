@@ -7,9 +7,9 @@
 plot_confirmed_per_million(df, ln_confirmed = F)
 }
 \arguments{
-\item{df}{}
+\item{df}{Data Frame Returned from getBrazilCovid19Data()}
 
-\item{ln_confirmed}{}
+\item{ln_confirmed}{Logical}
 }
 \description{
 Title

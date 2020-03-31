@@ -1,7 +1,7 @@
 #' Plots Covid-19 Per State in Brazil Map
 #'
 #' @param covid19_df Data Frame resulted from function get_covid19_br_data()
-#' @polygon_df Shape files resultado geobr::state(year==2018)
+#' @param polygon_df Shape files resultado geobr::state(year==2018)
 #'
 #' @return leaflet plot
 #' @export
@@ -68,7 +68,7 @@ plot_covid19_br_map <- function(covid19_df,polygon_df){
             textsize = "15px",
             direction = "auto")
         ) %>% 
-        leaflet::addLegend(pal = pal, values = ~cases_per_million, opacity = 0.7, title = "Nº Cases<br/>Per Million Habitants",
+        leaflet::addLegend(pal = pal, values = ~cases_per_million, opacity = 0.7, title = "Number Cases<br/>Per Million Habitants",
                   position = "bottomleft") -> map
       print("plot_covid19_br_map(): Map Created")
       

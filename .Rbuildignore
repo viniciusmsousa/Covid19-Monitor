@@ -7,3 +7,7 @@ $run_dev.*
 ^README\.Rmd$
 ^renv$
 ^renv\.lock$
+^.dockerignore$
+^Dockerfile$
+^start.sh$
+teste/

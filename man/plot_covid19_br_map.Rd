@@ -8,6 +8,8 @@ plot_covid19_br_map(covid19_df, polygon_df)
 }
 \arguments{
 \item{covid19_df}{Data Frame resulted from function get_covid19_br_data()}
+
+\item{polygon_df}{Shape files resultado geobr::state(year==2018)}
 }
 \value{
 leaflet plot
