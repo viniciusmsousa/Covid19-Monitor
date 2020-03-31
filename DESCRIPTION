@@ -11,7 +11,10 @@ Imports:
     DT,
     attempt,
     glue,
-    htmltools
+    htmltools,
+    dplyr,
+    tidyr,
+    ggplot2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
