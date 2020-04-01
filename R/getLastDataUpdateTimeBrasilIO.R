@@ -5,7 +5,8 @@
 #'
 #' @return String with the data information
 #' @export
-#'
+#' 
+#' @import xml2
 #' @import rvest
 #' @import stringr
 getLastDataUpdateTimeBrasilIO <- function(url = "https://brasil.io/dataset/covid19/caso",xpath = "/html/body/div[1]/div/div[2]/div[2]/div[2]/p"){

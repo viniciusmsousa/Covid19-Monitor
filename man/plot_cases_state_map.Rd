@@ -4,12 +4,14 @@
 \alias{plot_cases_state_map}
 \title{Plots the Cases for Each City Given a Selected State}
 \usage{
-plot_cases_state_map(df_covid19, State)
+plot_cases_state_map(df_covid19, State, state_shape_files)
 }
 \arguments{
 \item{df_covid19}{Data Frame Returned from getBrazilCovid19Data()}
 
 \item{State}{String with selected state (input$selected_state)}
+
+\item{state_shape_files}{Shape files of the states}
 }
 \description{
 Plots the Cases for Each City Given a Selected State

@@ -25,21 +25,23 @@ mod_Brazil_Monitor_ui <- function(id){
       # Brazil Monitor Sidebar --------------------------------------------------
       sidebarPanel = sidebarPanel(
         width = 3,
-        tags$h3("Objetivo"),
-        "Esta aba tem como intuito servir fornecer uma maneira de monitorar o avanço do Covid-19 no Brasil, fazendo comparacoes entre os estados e as cidades dentro de um estado.",
-        tags$br(),
-        tags$h3("Fonte de Dados e Atualizacoes"),
+        tags$div(
+          tags$h3("Sobre"),
+          "Esta aplicação, de código aberto, objetiva disponibilizar análises sobre os dados do Covid-19 no Brasil, Estados e Cidades, para ajudar no monitoramento dos dados sobre os casos de ocorrrência e combater a pandemia.
+           A aplicação foi desenvolvida por", tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Vinícius M. de Sousa"), ", graduado em Ciências Econômicas pela ESAG/UDESC, com a colaboração do prof. Antonio Heronaldo de Sousa do CCT/UDESC.
+           A Reitoria da ", tags$a(href="udesc.br","UDESC "),"disponibilizou toda a infraestrutura de hospedagem da aplicação para a difusão das informações de monitoramento na Internet.",
+          tags$br()
+        ),
+        tags$h3("Fonte de Dados"),
         tags$b("Casos e Mortes por Covid-19: "), tags$a(href="https://brasil.io/dataset/covid19/caso", "brasil.io")," que faz a coleta e tratamento dos dados dos boletins das Secretarias Estaduais de Saude.
-        E a aplicacao busca os dados mais recentes.",
+        E a aplicacao busca os dados mais recentes.", "Ultima atualizacao: ",getLastDataUpdateTimeBrasilIO(),
         tags$br(),
-        tags$h4("Ultima atulizacao"),
-        getLastDataUpdateTimeBrasilIO()
-        # tags$br(),
-        # tags$h4("Authors"),
-        # tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Vinicius M. de Sousa"),tags$br(),
-        # tags$a(href="https://www.linkedin.com/in/luanadasilva/","Luana da Silva"),tags$br(),
-        # tags$br(),tags$h4("Contact"),
-        # "vinisousa04@gmail.com",tags$br()
+        tags$br(),
+        tags$h5("Apoio:"),
+        div(
+          id = "img-id",
+          img(src = "www/logo.png",height="50%", width="50%",align="center")
+        )
       ),
 
       # Brazil Monitor Main Pane Tabs -------------------------------------------
@@ -53,7 +55,7 @@ mod_Brazil_Monitor_ui <- function(id){
                      shinydashboard::valueBoxOutput(outputId = ns("deaths_br"),width = 3),
                      shinydashboard::valueBoxOutput(outputId = ns("death_rate_br"),width = 3)
                    ),
-                   leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "750") %>%
+                   leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "730") %>%
                      shinycssloaders::withSpinner(color = loader_color)
           ),
           # Cases within State ------------------------------------------------------

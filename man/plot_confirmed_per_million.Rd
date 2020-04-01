@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_confirmed_per_million.R
 \name{plot_confirmed_per_million}
 \alias{plot_confirmed_per_million}
-\title{Title}
+\title{Plot Evolution over Time per State Nornalizazed by Million of Habitants}
 \usage{
 plot_confirmed_per_million(df, ln_confirmed = F)
 }
@@ -12,5 +12,5 @@ plot_confirmed_per_million(df, ln_confirmed = F)
 \item{ln_confirmed}{Logical}
 }
 \description{
-Title
+Plot Evolution over Time per State Nornalizazed by Million of Habitants
 }

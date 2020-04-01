@@ -7,10 +7,10 @@
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
-    #    golem_add_external_resources(),
+    golem_add_external_resources(),
     # List the first level UI elements here 
     navbarPage(
-      theme = shinythemes::shinytheme("spacelab"),
+      theme = shinythemes::shinytheme("flatly"),
       title = "Monitor Covid-19",id = "covid19",
       # Brazil Monitor Tab ------------------------------------------------------
       tabPanel(
@@ -19,13 +19,8 @@ app_ui <- function(request) {
         
       ),
       # About Tab ---------------------------------------------------------------
-      tabPanel("Sobre",
+      tabPanel("Sobre esta Aplicacao",
                tags$div(
-                 tags$h4("Notas:"),
-                 tags$ul(
-                   tags$li("As palavras nao estao acentuadas devido a outra utilidade da aplicao que exige alguns requisitos de encoding.")
-                 ),
-                 tags$br(),
                  tags$h4("Contato:"),
                  "vinisousa04@gmail.com ou via ", tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","linkedin"),
                  tags$br()
@@ -45,18 +40,19 @@ app_ui <- function(request) {
 #' @noRd
 golem_add_external_resources <- function(){
   
-  # add_resource_path(
-  #   'www', app_sys('app/www')
-  # )
-  # 
-  # tags$head(
-  #   favicon(),
-  #   bundle_resources(
-  #     path = app_sys('app/www'),
-  #     app_title = 'covid19'
-  #   )
-  #   # Add here other external resources
-  #   # for example, you can add shinyalert::useShinyalert() 
-  # )
+  add_resource_path(
+    'www', app_sys('app/www')
+  )
+
+  tags$head(
+    favicon(),
+    bundle_resources(
+      path = app_sys('app/www'),
+      app_title = 'covid19'
+    ),
+    # Add here other external resources
+    # for example, you can add shinyalert::useShinyalert()
+    tags$link(rel="stylesheet", type="text/css", href="www/estilos.css")
+  )
 }
 
