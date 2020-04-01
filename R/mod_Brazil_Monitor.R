@@ -8,6 +8,7 @@
 #'
 #' @importFrom shiny NS tagList 
 #' @import shinycssloaders
+#' @import shinydashboard
 #' @import leaflet 
 #' @import dplyr
 #' @import geobr
@@ -18,18 +19,21 @@ mod_Brazil_Monitor_ui <- function(id){
   tagList(
     sidebarLayout(
       # Brazil Monitor Sidebar --------------------------------------------------
-      sidebarPanel(
-        width = 3,
-        h3("Confirmed Covid-19 Cases:"),h4(textOutput(ns("confirmed_br"))),
-        br(),
-        h3("Deaths Cases:"),h4(textOutput(ns("deaths_br")))
-      ),
+      sidebarPanel = NULL,
+      # sidebarPanel(
+      #   width = 3,
+      # ),
       # Brazil Monitor Main Pane Tabs -------------------------------------------
       mainPanel(
-        width = 9,
+        width = 12,
         tabsetPanel(
           # General View (Map) ------------------------------------------------------
           tabPanel(title = "General View (Map)",
+                   fluidRow(
+                     shinydashboard::valueBoxOutput(outputId = ns("confirmed_cases_br"),width = 3),
+                     shinydashboard::valueBoxOutput(outputId = ns("deaths_br"),width = 3),
+                     shinydashboard::valueBoxOutput(outputId = ns("death_rate_br"),width = 3)
+                   ),
                    leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "750") %>%
                      shinycssloaders::withSpinner()
           ),
@@ -37,10 +41,16 @@ mod_Brazil_Monitor_ui <- function(id){
           tabPanel(
             title = "Cases within State",
             uiOutput(outputId = ns("selected_state")),
+            fluidRow(
+              shinydashboard::valueBoxOutput(outputId = ns("confirmed_cases_state"),width = 3),
+              shinydashboard::valueBoxOutput(outputId = ns("deaths_state"),width = 3),
+              shinydashboard::valueBoxOutput(outputId = ns("death_rate_state"),width = 3),
+              textOutput(ns("cities_with_deaths"))
+            ),
             leaflet::leafletOutput(outputId = ns("confirmed_cases_within_states_map"),height = "650") %>%
               shinycssloaders::withSpinner(),
             br(),
-            plotly::plotlyOutput(outputId = ns("confirmed_cases_within_states")) %>%
+            plotly::plotlyOutput(outputId = ns("confirmed_cases_within_states"),height = "500") %>%
               shinycssloaders::withSpinner(),
             br()
           ),
@@ -48,10 +58,10 @@ mod_Brazil_Monitor_ui <- function(id){
           tabPanel(
             title = "State Comparison Over Time",
             uiOutput(outputId = ns("ln_confirmed")),
-            plotly::plotlyOutput(outputId = ns("cases_over_time_per_state"),height = "500") %>%
+            plotly::plotlyOutput(outputId = ns("cases_over_time_per_state"),height = "650") %>%
               shinycssloaders::withSpinner(),
             br(),
-            plotly::plotlyOutput(outputId = ns("death_rate_over_time_states"),height = "500")
+            plotly::plotlyOutput(outputId = ns("death_rate_over_time_states"),height = "650")
           )
         )
       )
@@ -75,19 +85,27 @@ mod_Brazil_Monitor_server <- function(input, output, session){
   polygon_br <-  geobr::read_state(year=2018)
   
 
-  # computing info box ------------------------------------------------------
+  # States Choropleth Cases Per Million Hab ---------------------------------
   info <- covid19_br_data %>% filter(place_type=="state",is_last=="True") %>% select(confirmed,deaths) %>% summarise(confirmed=sum(confirmed,na.rm = T),deaths=sum(deaths,na.rm = T))
   
-  # Confirmed Cases and Deaths in Brazil ------------------------------------
-  output$confirmed_br <- renderText({
-    info$confirmed
+  output$confirmed_cases_br <- shinydashboard::renderValueBox({
+    shinydashboard::valueBox(
+      value = info$confirmed,
+      subtitle = "Confirmed Covid-19 Cases"
+    )
   })
-  output$deaths_br <- renderText({
-    info$deaths
+  output$deaths_br <- shinydashboard::renderValueBox({
+    shinydashboard::valueBox(
+      value = info$deaths,
+      subtitle = "Death Cases"
+    )
   })
-
-
-  # States Choropleth Cases Per Million Hab ---------------------------------
+  output$death_rate_br <- shinydashboard::renderValueBox({
+    shinydashboard::valueBox(
+      value = round((info$deaths/info$confirmed)*100,2),
+      subtitle = "Death Rate (%)"
+    )
+  })
   output$br_covid19_map <- leaflet::renderLeaflet({
     plot_covid19_br_map(
       covid19_df = covid19_br_data,
@@ -128,6 +146,76 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       width = "100%"
     )
   })
+  
+  output$confirmed_cases_state <- shinydashboard::renderValueBox({
+    
+    value <- covid19_br_data %>%
+      filter(
+        place_type=="state",
+        state==input$selected_state,
+        is_last=="True"
+      ) %>% 
+      select(confirmed) %>% 
+      unlist()
+    
+    shinydashboard::valueBox(
+      value = value,
+      subtitle = paste0("Confirmed Covid-19 Cases in ",
+                        input$selected_state)
+    )
+  })
+  output$deaths_state <- shinydashboard::renderValueBox({
+    
+    value <- covid19_br_data %>%
+      filter(
+        place_type=="state",
+        state==input$selected_state,
+        is_last=="True"
+      ) %>% 
+      select(deaths) %>% 
+      unlist()
+    
+    shinydashboard::valueBox(
+      value = value,
+      subtitle = paste0("Death Cases in ",
+                        input$selected_state)
+    )
+  })
+  output$death_rate_state <- shinydashboard::renderValueBox({
+    
+    value <- covid19_br_data %>%
+      filter(
+        place_type=="state",
+        state==input$selected_state,
+        is_last=="True"
+      ) %>% 
+      select(death_rate) %>% 
+      unlist()
+    
+    shinydashboard::valueBox(
+      value = round(value*100,digits = 2),
+      subtitle = paste0("Death Rate ",
+                        input$selected_state,
+                        "%")
+    )
+  })
+  output$cities_with_deaths <- renderText({
+    
+    value <- covid19_br_data %>%
+      filter(
+        place_type=="city",
+        state==input$selected_state,
+        is_last=="True",
+        deaths >0
+      ) %>% 
+      select(city) %>% 
+      unlist() %>% 
+      paste0(collapse = ", ")
+    
+    paste0("Cidades com Mortos: ",value)
+
+  })
+  
   output$confirmed_cases_within_states_map <- leaflet::renderLeaflet({
     plot_cases_state_map(
       df_covid19 = covid19_br_data,
