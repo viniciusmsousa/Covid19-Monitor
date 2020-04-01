@@ -6,3 +6,4 @@ renv/
 teste/
 Dockerfile
 start.sh
+.dockerignore
