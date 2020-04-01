@@ -1,0 +1,7 @@
+.Rprofile
+start.sh
+.Renviron
+renv/
+renv.lock
+notebooks/
+teste/
