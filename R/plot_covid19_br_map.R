@@ -38,7 +38,7 @@ plot_covid19_br_map <- function(covid19_df,polygon_df){
       )
       
       labels <- sprintf(
-        "<strong>%s</strong><br/>%.2f Per Million Habitants<br/>%d Confirmed Cases<br/>%d Deaths",
+        "<strong>%s</strong><br/>%.2f por Milhao de Hab.<br/>%d Casos Confirmados<br/>%d Mortes",
         df_br_covid19_geo_state$abbrev_state,
         df_br_covid19_geo_state$cases_per_million,
         df_br_covid19_geo_state$confirmed,
@@ -68,7 +68,7 @@ plot_covid19_br_map <- function(covid19_df,polygon_df){
             textsize = "15px",
             direction = "auto")
         ) %>% 
-        leaflet::addLegend(pal = pal, values = ~cases_per_million, opacity = 0.7, title = "Number Cases<br/>Per Million Habitants",
+        leaflet::addLegend(pal = pal, values = ~cases_per_million, opacity = 0.7, title = "Numero de Casos<br/>por Milhao de Hab.",
                   position = "bottomleft") -> map
       print("plot_covid19_br_map(): Map Created")
       

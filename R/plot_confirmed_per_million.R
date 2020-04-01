@@ -1,4 +1,4 @@
-#' Title
+#' Plot Evolution over Time per State Nornalizazed by Million of Habitants
 #'
 #' @param df Data Frame Returned from getBrazilCovid19Data()  
 #' @param ln_confirmed Logical
@@ -11,6 +11,7 @@
 #' @import plotly
 plot_confirmed_per_million <- function(df,ln_confirmed=F){
   out <- tryCatch({
+    
     requireNamespace("dplyr")
     print("Start data transformation")
     df %>%
@@ -70,11 +71,11 @@ plot_confirmed_per_million <- function(df,ln_confirmed=F){
       geom_line(size=0.8)+
       geom_point(size=2)+
       #Plot titles and Labels
-      ggtitle(label = "Covid-19 Spread in Brazilian States",
-              subtitle = "Normalized by Million of Habitants.")+
-      xlab("Number of Days Since First Confirmed Case Per Million Habitant")+
+      ggtitle(label = "Covid-19 por Estados nos Brasil",
+              subtitle = "Normalizado por Milhoes de Hab.")+
+      xlab("Dias desde o Primeiro Caso por Milhao de Hab.")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
-      ylab(ifelse(test = ln_confirmed==T,yes = "Ln of Confirmed Cases Per Million Habitant",no = "Confirmed Cases Per Million Habitant"))+
+      ylab(ifelse(test = ln_confirmed==T,yes = "Ln de Casos Confirmados por Milhao de Hab.",no = "Casos Confirmados por Milhao de Hab."))+
       theme_minimal()+
       theme(
         axis.title.x = element_text(face = "bold",
@@ -94,13 +95,13 @@ plot_confirmed_per_million <- function(df,ln_confirmed=F){
       plot+
         # Doubles every 2 days
         geom_line(data = doubles_2days_df,aes(x=.data$n_day,y=.data$doubles_2days),color="black",linetype = "dashed",show.legend = F)+
-        annotate(geom = "text",x = max(doubles_2days_df$n_day)+adjust_double_space,y = max(doubles_2days_df$doubles_2days),label="Doubles Every 2 days") +
+        annotate(geom = "text",x = max(doubles_2days_df$n_day)+adjust_double_space,y = max(doubles_2days_df$doubles_2days),label="Dobra a cada 2 Dias") +
         # Doubles every 5 days
         geom_line(data = doubles_5days_df,aes(x=.data$n_day,y=.data$doubles_5days),color="black",linetype = "dashed",show.legend = F)+
-        annotate(geom = "text",x = max(doubles_5days_df$n_day)+adjust_double_space,y = max(doubles_5days_df$doubles_5days),label="Doubles Every 5 days") +
+        annotate(geom = "text",x = max(doubles_5days_df$n_day)+adjust_double_space,y = max(doubles_5days_df$doubles_5days),label="Dobra a cada 5 Dias") +
         # Doubles every 10 days
         geom_line(data = doubles_10days_df,aes(x=.data$n_day,y=.data$doubles_10days),color="black",linetype = "dashed",show.legend = F)+
-        annotate(geom = "text",x = max(doubles_10days_df$n_day)+adjust_double_space,y = max(doubles_10days_df$doubles_10days),label="Doubles Every 10 days") -> plot
+        annotate(geom = "text",x = max(doubles_10days_df$n_day)+adjust_double_space,y = max(doubles_10days_df$doubles_10days),label="Dobra a cada 10 Dias") -> plot
     }
     plotly::ggplotly(plot)
   },

@@ -26,11 +26,11 @@ plot_cities_in_state_cases_over_time <- function(df_covid19,State){
       geom_line(size=0.8)+
       geom_point(size=2)+
       # Plot titles and Labels
-      # ggtitle(label = "Covid-19 Spread in Brazilian States",
-      #         subtitle = "Normalized by Million of Habitants.")+
-      xlab("Number of Days Since First Confirmed Case")+
+      ggtitle(label = paste0("Covid-19 nas Cidades de ",State),
+              subtitle = "Normalizado por 100 mil Hab.")+
+      xlab("Dias desde a Primeira Morte")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
-      ylab("Number of Confirmed Cases per 100k Habitants")+
+      ylab("Casos Confirmados por 100 mil Hab.")+
       theme_minimal()+
       theme(
         axis.title.x = element_text(face = "bold",

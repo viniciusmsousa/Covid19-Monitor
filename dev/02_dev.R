@@ -22,7 +22,8 @@ usethis::use_package("ggplot2")
 usethis::use_package("shinythemes")
 usethis::use_package("leaflet")
 usethis::use_package("geobr")
-
+usethis::use_package("rvest")
+usethis::use_package("stringr")
 usethis::use_package("shinycssloaders")
 usethis::use_package("plotly")
 usethis::use_package("utils")
@@ -43,8 +44,26 @@ golem::add_module(name = "Brazil_Monitor") # Name of the module
 #golem::add_css_file( "custom" )
 
 ## Add internal datasets ----
-## If you have data in your package
-#usethis::use_data_raw( name = "my_dataset", open = FALSE ) 
+# Shape File do Brasil (Estados)
+polygon_br <-  geobr::read_state(year=2018)
+
+# Shape File das Cidades por Estado
+covid19::getBrazilCovid19Data(url = "https://data.brasil.io/dataset/covid19/caso.csv.gz") %>% 
+  dplyr::as_tibble() %>% 
+  dplyr::select(state) %>% 
+  dplyr::distinct() %>% 
+  unlist() -> lista_estados
+shape_file_estados <- vector(mode = "list",length = length(lista_estados))
+shape_file_estados <- purrr::map(
+  lista_estados,
+  .f = function(sigla_estado){geobr::read_municipality(year = 2018,code_muni = sigla_estado)}
+)
+names(shape_file_estados) <- lista_estados
+
+# Salvando Arquivo
+usethis::use_data(polygon_br,shape_file_estados,internal = T,overwrite = T)
+
+
 
 ## Tests ----
 ## Add one line by test you want to create

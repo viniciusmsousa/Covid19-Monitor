@@ -10,8 +10,8 @@ app_ui <- function(request) {
 #    golem_add_external_resources(),
     # List the first level UI elements here 
     navbarPage(
-      theme = shinythemes::shinytheme("cosmo"),
-      title = "Covid-19 by Vinicius M. Sousa",id = "covid19",
+      theme = shinythemes::shinytheme("spacelab"),
+      title = tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Covid-19 Monitor by Vinicius M. de Sousa"),id = "covid19",
       # Brazil Monitor Tab ------------------------------------------------------
       tabPanel(
         title = "Brazil Monitor",

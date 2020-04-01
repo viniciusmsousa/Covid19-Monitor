@@ -2,16 +2,15 @@
 #'
 #' @param df_covid19 Data Frame Returned from getBrazilCovid19Data()  
 #' @param State String with selected state (input$selected_state)
-#'
+#' @param state_shape_files Shape files of the states
 #' @return
 #' @export
 #' 
 #' @import dplyr
 #' @import leaflet
-#' @import geobr
-plot_cases_state_map <- function(df_covid19,State){
+plot_cases_state_map <- function(df_covid19,State,state_shape_files){
   out <- tryCatch({
-    muni <- geobr::read_municipality(code_muni= State, year=2018)
+    muni <- shape_file_estados[[State]]
     df_covid19 %>% 
       filter(state==State,
              place_type=="city") -> estado_selecionado
@@ -34,7 +33,7 @@ plot_cases_state_map <- function(df_covid19,State){
     ) 
     
     labels <- sprintf(
-      "<strong>%s</strong><br/>%.d Confirmed Cases<br/>%d Deaths",
+      "<strong>%s</strong><br/>%.d Casos Confirmados<br/>%d Mortes",
       df_plot_estado$name_muni,
       df_plot_estado$confirmed,
       df_plot_estado$deaths
@@ -61,7 +60,7 @@ plot_cases_state_map <- function(df_covid19,State){
           textsize = "15px",
           direction = "auto")
       ) %>% 
-      leaflet::addLegend(pal = pal, values = ~confirmed, opacity = 0.7, title = "Number of Confirmed<br/>Cases",
+      leaflet::addLegend(pal = pal, values = ~confirmed, opacity = 0.7, title = "Numero de Casos<br/>Confirmados",
                 position = "topright",na.label = "No Cases") -> plot
     plot
   },

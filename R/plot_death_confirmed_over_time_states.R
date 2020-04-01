@@ -31,11 +31,10 @@ plot_death_confirmed_over_time_states <- function(df_covid19){
       geom_line(size=0.8)+
       geom_point(size=2)+
       # Plot titles and Labels
-      ggtitle(label = "Death Rate in Brazil States",
-              subtitle = "Normalized by 100k of Habitants.")+
-      xlab("Number of Days Since First Death")+
+      ggtitle(label = "Taxa de Mortalidade nos Estados")+
+      xlab("Dias desde a Primeira Morte")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
-      ylab("Death Rate (% of cases that died)")+
+      ylab("Taxa de Mortalidade")+
       theme_minimal()+
       theme(
         axis.title.x = element_text(face = "bold",
@@ -46,8 +45,6 @@ plot_death_confirmed_over_time_states <- function(df_covid19){
         title = element_text(face = "bold"),
         axis.text.x = element_text(face = "bold"),
         axis.text.y = element_text(face = "bold"),
-        #legend.position = c(0.9,0.95),
-        #legend.direction = "horizontal",
         legend.title = element_blank()
       )-> plot
     plot

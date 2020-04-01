@@ -21,7 +21,9 @@ Imports:
     geobr,
     plotly,
     shinycssloaders,
-    utils
+    utils,
+    rvest,
+    stringr
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1

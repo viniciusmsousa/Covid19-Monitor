@@ -11,35 +11,54 @@
 #' @import shinydashboard
 #' @import leaflet 
 #' @import dplyr
-#' @import geobr
 #' @import plotly
 
 mod_Brazil_Monitor_ui <- function(id){
   ns <- NS(id)
+
+  # UI Parameter ------------------------------------------------------------
+  loader_color <- "#3A3F44"
+
+  
   tagList(
     sidebarLayout(
       # Brazil Monitor Sidebar --------------------------------------------------
-      sidebarPanel = NULL,
-      # sidebarPanel(
-      #   width = 3,
-      # ),
+      sidebarPanel = sidebarPanel(
+        width = 3,
+        tags$h3("Objetivo"),
+        "Esta aba tem como intuito servir fornecer uma maneira de monitorar o avanço do Covid-19 no Brasil, fazendo comparacoes entre os estados e as cidades dentro de um estado.",
+        tags$br(),
+        tags$h3("Fonte de Dados e Atualizacoes"),
+        tags$b("Casos e Mortes por Covid-19: "), tags$a(href="https://brasil.io/dataset/covid19/caso", "brasil.io")," que faz a coleta e tratamento dos dados dos boletins das Secretarias Estaduais de Saude.
+        E a aplicacao busca os dados mais recentes.",
+        tags$br(),
+        tags$h4("Ultima atulizacao"),
+        getLastDataUpdateTimeBrasilIO()
+        # tags$br(),
+        # tags$h4("Authors"),
+        # tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Vinicius M. de Sousa"),tags$br(),
+        # tags$a(href="https://www.linkedin.com/in/luanadasilva/","Luana da Silva"),tags$br(),
+        # tags$br(),tags$h4("Contact"),
+        # "vinisousa04@gmail.com",tags$br()
+      ),
+
       # Brazil Monitor Main Pane Tabs -------------------------------------------
       mainPanel(
-        width = 12,
+        width = 9,
         tabsetPanel(
           # General View (Map) ------------------------------------------------------
-          tabPanel(title = "General View (Map)",
+          tabPanel(title = "Mapa de Casos no Brasil por Estados",
                    fluidRow(
                      shinydashboard::valueBoxOutput(outputId = ns("confirmed_cases_br"),width = 3),
                      shinydashboard::valueBoxOutput(outputId = ns("deaths_br"),width = 3),
                      shinydashboard::valueBoxOutput(outputId = ns("death_rate_br"),width = 3)
                    ),
                    leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "750") %>%
-                     shinycssloaders::withSpinner()
+                     shinycssloaders::withSpinner(color = loader_color)
           ),
           # Cases within State ------------------------------------------------------
           tabPanel(
-            title = "Cases within State",
+            title = "Casos nos Estados",
             uiOutput(outputId = ns("selected_state")),
             fluidRow(
               shinydashboard::valueBoxOutput(outputId = ns("confirmed_cases_state"),width = 3),
@@ -48,20 +67,21 @@ mod_Brazil_Monitor_ui <- function(id){
               textOutput(ns("cities_with_deaths"))
             ),
             leaflet::leafletOutput(outputId = ns("confirmed_cases_within_states_map"),height = "650") %>%
-              shinycssloaders::withSpinner(),
+              shinycssloaders::withSpinner(color = loader_color),
             br(),
             plotly::plotlyOutput(outputId = ns("confirmed_cases_within_states"),height = "500") %>%
-              shinycssloaders::withSpinner(),
+              shinycssloaders::withSpinner(color = loader_color),
             br()
           ),
           # State Comparison Over Time ----------------------------------------------
           tabPanel(
-            title = "State Comparison Over Time",
+            title = "Comparacao entre os Estados",
             uiOutput(outputId = ns("ln_confirmed")),
             plotly::plotlyOutput(outputId = ns("cases_over_time_per_state"),height = "650") %>%
-              shinycssloaders::withSpinner(),
+              shinycssloaders::withSpinner(color = loader_color),
             br(),
-            plotly::plotlyOutput(outputId = ns("death_rate_over_time_states"),height = "650")
+            plotly::plotlyOutput(outputId = ns("death_rate_over_time_states"),height = "650") %>%
+              shinycssloaders::withSpinner(color = loader_color)
           )
         )
       )
@@ -78,11 +98,10 @@ mod_Brazil_Monitor_server <- function(input, output, session){
   # Defining parameters -----------------------------------------------------
   br_covid19_url <- "https://data.brasil.io/dataset/covid19/caso.csv.gz"
   
-  
-  
-  # getting online data -----------------------------------------------------
+  # Loading data ------------------------------------------------------------
   covid19_br_data <- getBrazilCovid19Data(url = br_covid19_url)
-  polygon_br <-  geobr::read_state(year=2018)
+  load("R/sysdata.rda") #polygon_br,shape_file_estados
+  
   
 
   # States Choropleth Cases Per Million Hab ---------------------------------
@@ -91,19 +110,19 @@ mod_Brazil_Monitor_server <- function(input, output, session){
   output$confirmed_cases_br <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       value = info$confirmed,
-      subtitle = "Confirmed Covid-19 Cases"
+      subtitle = "Casos Confirmados"
     )
   })
   output$deaths_br <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       value = info$deaths,
-      subtitle = "Death Cases"
+      subtitle = "Mortes"
     )
   })
   output$death_rate_br <- shinydashboard::renderValueBox({
     shinydashboard::valueBox(
       value = round((info$deaths/info$confirmed)*100,2),
-      subtitle = "Death Rate (%)"
+      subtitle = "Tx. de Mortalidade (%)"
     )
   })
   output$br_covid19_map <- leaflet::renderLeaflet({
@@ -160,7 +179,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     
     shinydashboard::valueBox(
       value = value,
-      subtitle = paste0("Confirmed Covid-19 Cases in ",
+      subtitle = paste0("Casos Confirmades em ",
                         input$selected_state)
     )
   })
@@ -177,7 +196,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     
     shinydashboard::valueBox(
       value = value,
-      subtitle = paste0("Death Cases in ",
+      subtitle = paste0("Mortes em ",
                         input$selected_state)
     )
   })
@@ -194,9 +213,9 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     
     shinydashboard::valueBox(
       value = round(value*100,digits = 2),
-      subtitle = paste0("Death Rate ",
+      subtitle = paste0("Tx. de Mortalidade em",
                         input$selected_state,
-                        "%")
+                        "(%)")
     )
   })
   output$cities_with_deaths <- renderText({
@@ -212,14 +231,15 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       unlist() %>% 
       paste0(collapse = ", ")
     
-    paste0("Cidades com Mortos: ",value)
+    paste0("\n\nCidades com Mortes\nRegistradas: ",value)
 
   })
   
   output$confirmed_cases_within_states_map <- leaflet::renderLeaflet({
     plot_cases_state_map(
       df_covid19 = covid19_br_data,
-      State = input$selected_state
+      State = input$selected_state,
+      state_shape_files = shape_file_estados
     )
   })
   output$confirmed_cases_within_states <- plotly::renderPlotly({
