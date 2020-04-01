@@ -7,32 +7,31 @@
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
-#    golem_add_external_resources(),
+    #    golem_add_external_resources(),
     # List the first level UI elements here 
     navbarPage(
       theme = shinythemes::shinytheme("spacelab"),
-      title = tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Covid-19 Monitor by Vinicius M. de Sousa"),id = "covid19",
+      title = "Monitor Covid-19",id = "covid19",
       # Brazil Monitor Tab ------------------------------------------------------
       tabPanel(
-        title = "Brazil Monitor",
+        title = "Monitor Brasil",
         mod_Brazil_Monitor_ui("Brazil_Monitor_ui_1")
         
       ),
       # About Tab ---------------------------------------------------------------
-      tabPanel("About",
+      tabPanel("Sobre",
                tags$div(
-                 tags$h4("Disclaimer"),
-                 "The development of this tool was motivated by the poor news coverage of general midea and intendends to provida a way to properly compare the Covid-19 Spread (in Brazil at this moment).",
-                 tags$br(),tags$h4("Data Sources and Updates"),
-                 tags$b("Brazil Covid-19: "), tags$a(href="https://brasil.io/dataset/covid19/caso", "brasil.io")," that make availiable the data published by Governmental Health agencies.",tags$br(),
-                 tags$br(),tags$h4("Authors"),
-                 tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Vinicius M. de Sousa"),tags$br(),
-                 tags$a(href="https://www.linkedin.com/in/luanadasilva/","Luana da Silva"),tags$br(),
-                 tags$br(),tags$h4("Contact"),
-                 "vinisousa04@gmail.com",tags$br()
+                 tags$h4("Notas:"),
+                 tags$ul(
+                   tags$li("As palavras nao estao acentuadas devido a outra utilidade da aplicao que exige alguns requisitos de encoding.")
+                 ),
+                 tags$br(),
+                 tags$h4("Contato:"),
+                 "vinisousa04@gmail.com ou via ", tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","linkedin"),
+                 tags$br()
                )
       )
-  )
+    )
   )
 } 
 
