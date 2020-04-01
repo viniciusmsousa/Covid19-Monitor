@@ -13,7 +13,7 @@ getLastDataUpdateTimeBrasilIO <- function(url = "https://brasil.io/dataset/covid
   out <- tryCatch(
     {
       url %>%
-        read_html() %>%
+        xml2::read_html() %>%
         html_nodes(xpath = xpath) %>% 
         as.character() %>% 
         str_remove_all("\n") %>% 
