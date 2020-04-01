@@ -28,6 +28,7 @@ usethis::use_package("shinycssloaders")
 usethis::use_package("plotly")
 usethis::use_package("utils")
 usethis::use_package("xml2")
+usethis::use_package("shinydashboard")
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module(name = "Brazil_Monitor") # Name of the module
