@@ -21,6 +21,8 @@ app_ui <- function(request) {
       # About Tab ---------------------------------------------------------------
       tabPanel("Sobre esta Aplicacao",
                tags$div(
+                 tags$h4("Codigo Fonte:"),
+                 tags$a(href="https://github.com/viniciusmsousa/Covid19-Monitor","github.com/viniciusmsousa"),
                  tags$h4("Contato:"),
                  "vinisousa04@gmail.com ou via ", tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","linkedin"),
                  tags$br()

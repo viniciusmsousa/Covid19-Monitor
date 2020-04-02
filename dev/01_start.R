@@ -29,7 +29,7 @@ golem::set_golem_options()
 ## Create Common Files ----
 usethis::use_ccby_license(name = "Vinicius M. de Sousa")
 usethis::use_readme_rmd(open = FALSE)
-usethis::use_lifecycle_badge("Experimental")
+usethis::use_lifecycle_badge("Maturing")
 
 ## Use git ----
 usethis::use_git()
