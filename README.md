@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 <!-- badges: end -->
 
 Esta aplicacao objetiva disponibilizar analises sobre os dados do
@@ -16,4 +16,4 @@ ocorrencia e combater a pandemia. A aplicacao foi desenvolvida por mim
 com a colaboração do prof. Antonio Heronaldo de Sousa do CCT/UDESC. A
 Reitoria da UDESC disponibilizou toda a infraestrutura de hospedagem da
 aplicacao para a difusao das informacoes de monitoramento na Internet. E
-pode ser acessada no link <http://covid.monitor.udesc.br>
+pode ser acessada no link <http://covid.monitor.udesc.br>.
