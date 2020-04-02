@@ -8,10 +8,11 @@
 #' 
 #' @import dplyr
 #' @import leaflet
+#' @import sf
 #' 
 plot_cases_state_map <- function(df_covid19,State,state_shape_files){
   out <- tryCatch({
-    muni <- shape_file_estados[[State]]
+    muni <- state_shape_files[[State]]
     
     df_covid19 %>% 
       filter(state==State,

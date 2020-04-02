@@ -8,6 +8,7 @@
 #'
 #' @import dplyr
 #' @import leaflet
+#' @import sf
 plot_covid19_br_map <- function(covid19_df,polygon_df){
 
   out <- tryCatch({
