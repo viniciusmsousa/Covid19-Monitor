@@ -25,7 +25,8 @@ Imports:
     rvest,
     stringr,
     xml2,
-    shinydashboard
+    shinydashboard,
+    rmarkdown
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1

@@ -8,21 +8,21 @@
 #' 
 #' @import dplyr
 #' @import leaflet
+#' 
 plot_cases_state_map <- function(df_covid19,State,state_shape_files){
   out <- tryCatch({
     muni <- shape_file_estados[[State]]
+    
     df_covid19 %>% 
       filter(state==State,
-             place_type=="city") -> estado_selecionado
-    
-    estado_selecionado %>% 
+             place_type=="city") %>% 
       filter(is_last=="True") %>% 
       select(city,confirmed,deaths,death_rate,city_ibge_code) -> estado_selecionado_plot_mapa
     
     
     muni %>% 
       left_join(
-        estado_selecionado_plot_mapa,
+        as.data.frame(estado_selecionado_plot_mapa),
         by = c("code_muni"="city_ibge_code")
       ) -> df_plot_estado
     

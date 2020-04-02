@@ -27,7 +27,7 @@ plot_covid19_br_map <- function(covid19_df,polygon_df){
       
       print("plot_covid19_br_map(): Computing df_br_covid19_geo_state")
       polygon_df %>% 
-        left_join(df_aux,
+        left_join(as.data.frame(df_aux),
                   by = c("abbrev_state"="state")) -> df_br_covid19_geo_state
       print("plot_covid19_br_map(): df_br_covid19_geo_state Computed")
       
