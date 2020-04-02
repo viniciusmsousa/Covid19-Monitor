@@ -9,7 +9,7 @@
 #'
 #' @import dplyr
 #' @import utils
-getBrazilCovid19Data <- function(url){
+getBrazilCovid19Data <- function(url = "https://data.brasil.io/dataset/covid19/caso.csv.gz"){
   out <- tryCatch({
     # Casos Covid-19
     tmp <- tempfile()
