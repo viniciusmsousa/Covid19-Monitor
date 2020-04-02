@@ -4,7 +4,8 @@
 \alias{getBrazilCovid19Data}
 \title{Get Covid-19 Brasil Data from Brasil.io}
 \usage{
-getBrazilCovid19Data(url)
+
+  getBrazilCovid19Data(url = "https://data.brasil.io/dataset/covid19/caso.csv.gz")
 }
 \arguments{
 \item{url}{String with the url}
