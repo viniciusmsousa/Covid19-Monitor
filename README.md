@@ -15,5 +15,4 @@ mundial), para ajudar no monitoramento dos dados sobre os casos de
 ocorrencia e combater a pandemia. A aplicacao foi desenvolvida por mim
 com a colaboração do prof. Antonio Heronaldo de Sousa do CCT/UDESC. A
 Reitoria da UDESC disponibilizou toda a infraestrutura de hospedagem da
-aplicacao para a difusao das informacoes de monitoramento na Internet. E
-pode ser acessada no link <http://covid.monitor.udesc.br>.
+aplicacao para a difusao das informacoes de monitoramento na Internet.
