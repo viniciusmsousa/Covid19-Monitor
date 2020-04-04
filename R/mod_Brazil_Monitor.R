@@ -57,7 +57,8 @@ mod_Brazil_Monitor_ui <- function(id){
                    ),
                    leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "710") %>%
                      shinycssloaders::withSpinner(color = loader_color),
-                   plotly::plotlyOutput(outputId = ns("br_new_cases_and_deaths_moving_avg"),height = "650")
+                   plotly::plotlyOutput(outputId = ns("br_new_cases_and_deaths_moving_avg"),height = "650") %>% 
+                     shinycssloaders::withSpinner(color = loader_color)
           ),
           # Cases within State ------------------------------------------------------
           tabPanel(
@@ -70,6 +71,9 @@ mod_Brazil_Monitor_ui <- function(id){
               textOutput(ns("cities_with_deaths"))
             ),
             leaflet::leafletOutput(outputId = ns("confirmed_cases_within_states_map"),height = "650") %>%
+              shinycssloaders::withSpinner(color = loader_color),
+            br(),
+            plotly::plotlyOutput(outputId = ns("state_new_cases_and_deaths_moving_avg"),height = "500") %>% 
               shinycssloaders::withSpinner(color = loader_color),
             br(),
             plotly::plotlyOutput(outputId = ns("confirmed_cases_within_states"),height = "500") %>%
@@ -100,6 +104,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
   ns <- session$ns
   # Defining parameters -----------------------------------------------------
   br_covid19_url <- "https://data.brasil.io/dataset/covid19/caso.csv.gz"
+
   
   # Loading data ------------------------------------------------------------
   covid19_br_data <- getBrazilCovid19Data(url = br_covid19_url)
@@ -135,39 +140,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     ) 
   })
   output$br_new_cases_and_deaths_moving_avg <- plotly::renderPlotly({
-    plotly::ggplotly(plot_moving_avg(df = covid19_br_data)) %>% 
-      plotly::config(
-        displaylogo = F,
-        modeBarButtonsToRemove = list(
-          'sendDataToCloud',
-          'toImage',
-          'autoScale2d',
-          'resetScale2d',
-          'hoverClosestCartesian',
-          'zoom2d',
-          'pan2d',
-          'select2d',
-          'lasso2d',
-          'zoomIn2d', 
-          'zoomOut2d',
-          'zoom3d',
-          'pan3d',
-          'resetCameraDefault3d',
-          'resetCameraLastSave3d',
-          'hoverClosest3d',
-          'orbitRotation',
-          'tableRotation',
-          'zoomInGeo',
-          'zoomOutGeo',
-          'resetGeo',
-          'hoverClosestGeo',
-          'hoverClosestGl2d', 
-          'hoverClosestPie',
-          'toggleHover', 
-          'resetViews',
-          'toggleSpikelines',
-          'resetViewMapbox')
-      )
+    plotly::ggplotly(plot_moving_avg(df = covid19_br_data,state_view=F,state_selected==NULL))
   })
   
 
@@ -278,6 +251,15 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       df_covid19 = covid19_br_data,
       State = input$selected_state,
       state_shape_files = shape_file_estados
+    )
+  })
+  output$state_new_cases_and_deaths_moving_avg <- plotly::renderPlotly({
+    plotly::ggplotly(
+      plot_moving_avg(
+        df = covid19_br_data, 
+        state_selected = input$selected_state,
+        state_view = T
+      )
     )
   })
   output$confirmed_cases_within_states <- plotly::renderPlotly({

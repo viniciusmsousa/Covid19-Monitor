@@ -5,8 +5,9 @@
 #'
 #'
 #' @param df Data Frame returned from getBrazilCovid19Data() function. 
-#' @param state_view Logical. If F (deafault) then return the view for the whole country. 
-#' If T, the return the state view
+#' @param state String. State name in 2 letter. If NULL 9default) then return the plot for the
+#' country aggragated data.
+#' @param state_view Logical. Indicating whether is to compute per state or aggregated for the whole country.
 #'
 #' @return ggplot object
 #' @export
@@ -15,12 +16,42 @@
 #' @import dplyr
 #' @import tidyr
 #' @import zoo
-plot_moving_avg <- function(df,state_view = F){
+plot_moving_avg <- function(df,state_selected,state_view){
   
   out <- tryCatch({
     # Aggragating Data Frame --------------------------------------------------
-    if(state_view==F){
+    if(state_view==T){
+      print("plot_moving_avg: state_view==T")
       df %>% 
+        mutate(date=as.Date(date)) %>%
+        filter(state==state_selected,
+               place_type=="state") %>%
+        group_by(date) %>% 
+        summarise(
+          confirmed = sum(confirmed,na.rm = T),
+          deaths = sum(deaths,na.rm = T)
+        ) %>% 
+        mutate(
+          new_cases = confirmed - lag(confirmed, default = 0),
+          new_deaths = deaths - lag(deaths, default = 0)
+        ) %>% 
+        ungroup() %>%
+        arrange(date) %>% 
+        mutate(
+          `Novos Casos` = zoo::rollmean(x = new_cases,7,align="right",fill=NA),
+          `Novas Mortes` = zoo::rollmean(x = new_deaths,7,align="right",fill=NA)
+        ) %>% 
+        gather(
+          "Variavel",
+          "moving_average",
+          c(`Novos Casos`,`Novas Mortes`)
+        ) -> df_plot
+    
+    }
+    else{
+      print("plot_moving_avg: state_view==F")
+      df %>% 
+        mutate(date=as.Date(date)) %>%
         filter(place_type=="state") %>% 
         group_by(date) %>% 
         summarise(
@@ -32,7 +63,6 @@ plot_moving_avg <- function(df,state_view = F){
           new_deaths = deaths - lag(deaths, default = 0)
         ) %>% 
         ungroup() %>%
-        mutate(date=as.Date(date)) %>%
         arrange(date) %>% 
         mutate(
           `Novos Casos` = zoo::rollmean(x = new_cases,7,align="right",fill=NA),
@@ -43,9 +73,6 @@ plot_moving_avg <- function(df,state_view = F){
           "moving_average",
           c(`Novos Casos`,`Novas Mortes`)
         ) -> df_plot
-    }
-    else{
-      
     }
     
     
@@ -63,8 +90,8 @@ plot_moving_avg <- function(df,state_view = F){
     plot
   },
   error = function(cond){
-    message("Error in function plot_moving_avg()")
-    message(cond)
+    #print("Error in function plot_moving_avg()")
+    print(cond)
   })
   return(out)
 }
