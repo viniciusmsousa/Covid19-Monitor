@@ -31,17 +31,7 @@ plot_cities_in_state_cases_over_time <- function(df_covid19,State){
       xlab("Dias desde a Primeira Morte")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
       ylab("Casos Confirmados por 100 mil Hab.")+
-      theme_minimal()+
-      theme(
-        axis.title.x = element_text(face = "bold",
-                                    size = 12),
-        axis.title.y = element_text(face = "bold",
-                                    size = 12),
-        title = element_text(face = "bold"),
-        axis.text.x = element_text(face = "bold"),
-        axis.text.y = element_text(face = "bold"),
-        legend.title = element_blank()
-      ) -> p
+      load_custom_theme() -> p
     p
   },
   error=function(cond){

@@ -76,20 +76,7 @@ plot_confirmed_per_million <- function(df,ln_confirmed=F){
       xlab("Dias desde o Primeiro Caso por Milhao de Hab.")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
       ylab(ifelse(test = ln_confirmed==T,yes = "Ln de Casos Confirmados por Milhao de Hab.",no = "Casos Confirmados por Milhao de Hab."))+
-      theme_minimal()+
-      theme(
-        axis.title.x = element_text(face = "bold",
-                                    size = 12,
-                                    hjust = 0),
-        axis.title.y = element_text(face = "bold",
-                                    size = 12),
-        title = element_text(face = "bold"),
-        axis.text.x = element_text(face = "bold"),
-        axis.text.y = element_text(face = "bold"),
-        #legend.position = c(0.9,0.95),
-        #legend.direction = "horizontal",
-        legend.title = element_blank()
-      )-> plot
+      load_custom_theme() -> plot
     
     if(ln_confirmed==T){
       plot+

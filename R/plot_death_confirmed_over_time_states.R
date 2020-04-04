@@ -35,18 +35,7 @@ plot_death_confirmed_over_time_states <- function(df_covid19){
       xlab("Dias desde a Primeira Morte")+
       scale_x_continuous(breaks = seq(1,max_days,1))+
       ylab("Taxa de Mortalidade")+
-      theme_minimal()+
-      theme(
-        axis.title.x = element_text(face = "bold",
-                                    size = 12,
-                                    hjust = 0),
-        axis.title.y = element_text(face = "bold",
-                                    size = 12),
-        title = element_text(face = "bold"),
-        axis.text.x = element_text(face = "bold"),
-        axis.text.y = element_text(face = "bold"),
-        legend.title = element_blank()
-      )-> plot
+      load_custom_theme() -> plot
     plot
   },
   error=function(cond){
