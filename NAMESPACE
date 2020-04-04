@@ -2,6 +2,7 @@
 
 export(getBrazilCovid19Data)
 export(getLastDataUpdateTimeBrasilIO)
+export(load_custom_theme)
 export(plot_cases_state_map)
 export(plot_cities_in_state_cases_over_time)
 export(plot_confirmed_per_million)
