@@ -27,9 +27,9 @@ mod_Brazil_Monitor_ui <- function(id){
         width = 3,
         tags$div(
           tags$h3("Sobre"),
-          "Esta aplicação, de código aberto, objetiva disponibilizar análises sobre os dados do Covid-19 no Brasil, Estados e Cidades, para ajudar no monitoramento dos dados sobre os casos de ocorrrência e combater a pandemia.
-           A aplicação foi desenvolvida por", tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Vinícius M. de Sousa"), ", graduado em Ciências Econômicas pela ESAG/UDESC, com a colaboração do prof. Antonio Heronaldo de Sousa do CCT/UDESC.
-           A Reitoria da ", tags$a(href="udesc.br","UDESC "),"disponibilizou toda a infraestrutura de hospedagem da aplicação para a difusão das informações de monitoramento na Internet.",
+          "Esta aplicacao, de codigo aberto, objetiva disponibilizar analises sobre os dados do Covid-19 no Brasil, Estados e Cidades, para ajudar no monitoramento dos dados sobre os casos de ocorrencia e combater a pandemia.
+           A aplicacao foi desenvolvida por", tags$a(href="https://www.linkedin.com/in/viniciusmsousa/","Vinicius M. de Sousa"), ", graduado em Ciencias Economicas pela ESAG/UDESC, com a colaboracao do prof. Antonio Heronaldo de Sousa do CCT/UDESC.
+           A Reitoria da ", tags$a(href="udesc.br","UDESC "),"disponibilizou toda a infraestrutura de hospedagem da aplicação para a difusao das informacoes de monitoramento na Internet.",
           tags$br()
         ),
         tags$h3("Fonte de Dados"),
@@ -76,6 +76,8 @@ mod_Brazil_Monitor_ui <- function(id){
             plotly::plotlyOutput(outputId = ns("state_new_cases_and_deaths_moving_avg"),height = "500") %>% 
               shinycssloaders::withSpinner(color = loader_color),
             br(),
+            "Dica: Clique duas vezes na legenda da cidade para selecionar apenas a cidade e depois clique uma vez nas outras cidades para adiciona-las.",
+            br(),
             plotly::plotlyOutput(outputId = ns("confirmed_cases_within_states"),height = "500") %>%
               shinycssloaders::withSpinner(color = loader_color),
             br()
@@ -83,6 +85,9 @@ mod_Brazil_Monitor_ui <- function(id){
           # State Comparison Over Time ----------------------------------------------
           tabPanel(
             title = "Comparacao entre os Estados",
+            br(),
+            "Dica: Clique duas vezes na legenda do estado para selecionar apenas o estado e depois clique uma vez nos outros estados para adiciona-los.",
+            br(),
             uiOutput(outputId = ns("ln_confirmed")),
             plotly::plotlyOutput(outputId = ns("cases_over_time_per_state"),height = "650") %>%
               shinycssloaders::withSpinner(color = loader_color),
@@ -140,7 +145,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     ) 
   })
   output$br_new_cases_and_deaths_moving_avg <- plotly::renderPlotly({
-    plotly::ggplotly(plot_moving_avg(df = covid19_br_data,state_view=F,state_selected==NULL))
+    plotly::ggplotly(plot_moving_avg(df = covid19_br_data,state_view=F,state_selected=NULL))
   })
   
 
@@ -148,7 +153,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
   output$ln_confirmed <- renderUI({
     selectInput(
       inputId = session$ns("ln_confirmed"),
-      label = h5("Natural Log Transformtion"),
+      label = h5("Transformacao Log Natural:"),
       choices = list("Yes" = T, "No" = F),
       selected = T
     )

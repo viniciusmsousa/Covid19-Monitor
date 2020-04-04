@@ -4,15 +4,15 @@
 \alias{plot_moving_avg}
 \title{Plot New Cases and New Deaths Moving Average}
 \usage{
-plot_moving_avg(df, state, state_view)
+plot_moving_avg(df, state_selected, state_view)
 }
 \arguments{
 \item{df}{Data Frame returned from getBrazilCovid19Data() function.}
 
+\item{state_view}{Logical. Indicating whether is to compute per state or aggregated for the whole country.}
+
 \item{state}{String. State name in 2 letter. If NULL 9default) then return the plot for the
 country aggragated data.}
-
-\item{state_view}{Logical. Indicating whether is to compute per state or aggregated for the whole country.}
 }
 \value{
 ggplot object
