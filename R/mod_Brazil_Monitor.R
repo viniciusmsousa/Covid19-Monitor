@@ -55,8 +55,9 @@ mod_Brazil_Monitor_ui <- function(id){
                      shinydashboard::valueBoxOutput(outputId = ns("deaths_br"),width = 3),
                      shinydashboard::valueBoxOutput(outputId = ns("death_rate_br"),width = 3)
                    ),
-                   leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "730") %>%
-                     shinycssloaders::withSpinner(color = loader_color)
+                   leaflet::leafletOutput(outputId = ns("br_covid19_map"),height = "710") %>%
+                     shinycssloaders::withSpinner(color = loader_color),
+                   plotly::plotlyOutput(outputId = ns("br_new_cases_and_deaths_moving_avg"),height = "650")
           ),
           # Cases within State ------------------------------------------------------
           tabPanel(
@@ -132,6 +133,41 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       covid19_df = covid19_br_data,
       polygon_df = polygon_br
     ) 
+  })
+  output$br_new_cases_and_deaths_moving_avg <- plotly::renderPlotly({
+    plotly::ggplotly(plot_moving_avg(df = covid19_br_data)) %>% 
+      plotly::config(
+        displaylogo = F,
+        modeBarButtonsToRemove = list(
+          'sendDataToCloud',
+          'toImage',
+          'autoScale2d',
+          'resetScale2d',
+          'hoverClosestCartesian',
+          'zoom2d',
+          'pan2d',
+          'select2d',
+          'lasso2d',
+          'zoomIn2d', 
+          'zoomOut2d',
+          'zoom3d',
+          'pan3d',
+          'resetCameraDefault3d',
+          'resetCameraLastSave3d',
+          'hoverClosest3d',
+          'orbitRotation',
+          'tableRotation',
+          'zoomInGeo',
+          'zoomOutGeo',
+          'resetGeo',
+          'hoverClosestGeo',
+          'hoverClosestGl2d', 
+          'hoverClosestPie',
+          'toggleHover', 
+          'resetViews',
+          'toggleSpikelines',
+          'resetViewMapbox')
+      )
   })
   
 
