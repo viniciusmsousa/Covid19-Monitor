@@ -1,6 +1,6 @@
 FROM openanalytics/r-base
 
-MAINTAINER Vinicius Sousa "vinicius.sousa@aquare.la" 
+MAINTAINER Vinicius Sousa "vinisousa04@gmail.com" 
 
 RUN apt-get update -qq && apt-get -y install \
   libxml2-dev \
