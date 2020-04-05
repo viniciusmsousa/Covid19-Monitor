@@ -86,6 +86,19 @@ mod_Brazil_Monitor_ui <- function(id){
           tabPanel(
             title = "Comparacao entre os Estados",
             br(),
+            fluidRow(
+              plotly::plotlyOutput(outputId = ns("states_mv_7days_1")) %>% 
+                shinycssloaders::withSpinner(color = loader_color),
+              plotly::plotlyOutput(outputId = ns("states_mv_7days_2")) %>% 
+                shinycssloaders::withSpinner(color = loader_color)
+            ),
+            fluidRow(
+              plotly::plotlyOutput(outputId = ns("states_mv_7days_3")) %>% 
+                shinycssloaders::withSpinner(color = loader_color),
+              plotly::plotlyOutput(outputId = ns("states_mv_7days_4")) %>% 
+                shinycssloaders::withSpinner(color = loader_color)
+            ),
+            br(),
             "Dica: Clique duas vezes na legenda do estado para selecionar apenas o estado e depois clique uma vez nos outros estados para adiciona-los.",
             br(),
             uiOutput(outputId = ns("ln_confirmed")),
@@ -169,7 +182,40 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       df_covid19 = covid19_br_data
     )
   })
-  
+  output$states_mv_7days_1 <- plotly::renderPlotly({
+    plotly::ggplotly(
+      plot_multiple_states_mavg_new_cases(
+        df = covid19_br_data,
+        i_ini = 1,i_final = 7
+      )
+    )
+  })
+  output$states_mv_7days_2 <- plotly::renderPlotly({
+    plotly::ggplotly(
+      plot_multiple_states_mavg_new_cases(
+        df = covid19_br_data,
+        i_ini = 8,i_final = 15
+      )
+    )
+  })
+  output$states_mv_7days_3 <- plotly::renderPlotly({
+    plotly::ggplotly(
+      plot_multiple_states_mavg_new_cases(
+        df = covid19_br_data,
+        i_ini = 16,i_final = 23
+      )
+    )
+  })
+  output$states_mv_7days_4 <- plotly::renderPlotly({
+    plotly::ggplotly(
+      plot_multiple_states_mavg_new_cases(
+        df = covid19_br_data,
+        i_ini = 24,i_final = NULL
+      )
+    )
+  })
+  #16-23
+  #24-lenght(estados)
   # Within State ------------------------------------------------------------
   output$selected_state <- renderUI({
     selectInput(
