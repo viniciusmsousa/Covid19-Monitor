@@ -32,7 +32,7 @@ usethis::use_package("shinydashboard")
 usethis::use_package("rmarkdown")
 usethis::use_package("sf")
 usethis::use_package("zoo")
-
+usethis::use_package("DT")
 ## Add modules ----
 ## Create a module infrastructure in R/
 golem::add_module(name = "Brazil_Monitor") # Name of the module

@@ -68,10 +68,12 @@ mod_Brazil_Monitor_ui <- function(id){
               shinydashboard::valueBoxOutput(outputId = ns("confirmed_cases_state"),width = 3),
               shinydashboard::valueBoxOutput(outputId = ns("deaths_state"),width = 3),
               shinydashboard::valueBoxOutput(outputId = ns("death_rate_state"),width = 3),
-              textOutput(ns("cities_with_deaths"))
             ),
-            leaflet::leafletOutput(outputId = ns("confirmed_cases_within_states_map"),height = "650") %>%
-              shinycssloaders::withSpinner(color = loader_color),
+            fluidRow(
+              column(9,leaflet::leafletOutput(outputId = ns("confirmed_cases_within_states_map"),height = "650") %>%
+                       shinycssloaders::withSpinner(color = loader_color)),
+              column(3,DT::dataTableOutput(outputId = ns("table_cities_with_deaths"),height = "650")),
+            ),
             br(),
             plotly::plotlyOutput(outputId = ns("state_new_cases_and_deaths_moving_avg"),height = "500") %>% 
               shinycssloaders::withSpinner(color = loader_color),
@@ -85,19 +87,6 @@ mod_Brazil_Monitor_ui <- function(id){
           # State Comparison Over Time ----------------------------------------------
           tabPanel(
             title = "Comparacao entre os Estados",
-            br(),
-            fluidRow(
-              plotly::plotlyOutput(outputId = ns("states_mv_7days_1")) %>% 
-                shinycssloaders::withSpinner(color = loader_color),
-              plotly::plotlyOutput(outputId = ns("states_mv_7days_2")) %>% 
-                shinycssloaders::withSpinner(color = loader_color)
-            ),
-            fluidRow(
-              plotly::plotlyOutput(outputId = ns("states_mv_7days_3")) %>% 
-                shinycssloaders::withSpinner(color = loader_color),
-              plotly::plotlyOutput(outputId = ns("states_mv_7days_4")) %>% 
-                shinycssloaders::withSpinner(color = loader_color)
-            ),
             br(),
             "Dica: Clique duas vezes na legenda do estado para selecionar apenas o estado e depois clique uma vez nos outros estados para adiciona-los.",
             br(),
@@ -182,38 +171,7 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       df_covid19 = covid19_br_data
     )
   })
-  output$states_mv_7days_1 <- plotly::renderPlotly({
-    plotly::ggplotly(
-      plot_multiple_states_mavg_new_cases(
-        df = covid19_br_data,
-        i_ini = 1,i_final = 7
-      )
-    )
-  })
-  output$states_mv_7days_2 <- plotly::renderPlotly({
-    plotly::ggplotly(
-      plot_multiple_states_mavg_new_cases(
-        df = covid19_br_data,
-        i_ini = 8,i_final = 15
-      )
-    )
-  })
-  output$states_mv_7days_3 <- plotly::renderPlotly({
-    plotly::ggplotly(
-      plot_multiple_states_mavg_new_cases(
-        df = covid19_br_data,
-        i_ini = 16,i_final = 23
-      )
-    )
-  })
-  output$states_mv_7days_4 <- plotly::renderPlotly({
-    plotly::ggplotly(
-      plot_multiple_states_mavg_new_cases(
-        df = covid19_br_data,
-        i_ini = 24,i_final = NULL
-      )
-    )
-  })
+
   #16-23
   #24-lenght(estados)
   # Within State ------------------------------------------------------------
@@ -280,28 +238,18 @@ mod_Brazil_Monitor_server <- function(input, output, session){
                         "(%)")
     )
   })
-  output$cities_with_deaths <- renderText({
-    
-    value <- covid19_br_data %>%
-      filter(
-        place_type=="city",
-        state==input$selected_state,
-        is_last=="True",
-        deaths >0
-      ) %>% 
-      select(city) %>% 
-      unlist() %>% 
-      paste0(collapse = ", ")
-    
-    paste0("\n\nCidades com Mortes\nRegistradas: ",value)
 
-  })
-  
   output$confirmed_cases_within_states_map <- leaflet::renderLeaflet({
     plot_cases_state_map(
       df_covid19 = covid19_br_data,
       State = input$selected_state,
       state_shape_files = shape_file_estados
+    )
+  })
+  output$table_cities_with_deaths <- DT::renderDataTable({
+    cities_with_deaths_data_table(
+      df = covid19_br_data,
+      selected_state = input$selected_state
     )
   })
   output$state_new_cases_and_deaths_moving_avg <- plotly::renderPlotly({
