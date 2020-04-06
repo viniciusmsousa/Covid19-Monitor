@@ -12,6 +12,7 @@
 #' @import leaflet 
 #' @import dplyr
 #' @import plotly
+#' @import echarts4r
 
 mod_Brazil_Monitor_ui <- function(id){
   ns <- NS(id)
@@ -94,6 +95,21 @@ mod_Brazil_Monitor_ui <- function(id){
             plotly::plotlyOutput(outputId = ns("cases_over_time_per_state"),height = "650") %>%
               shinycssloaders::withSpinner(color = loader_color),
             br(),
+            fluidRow(
+              column(
+                width = 10,
+                echarts4r::echarts4rOutput(outputId = ns("heatmap_mavg_new_cases"),height = "700")
+              ),
+              column(
+                width = 2,
+                tags$h3("Explicao Grafico"), 
+                "O grafico ao lado e uma maneira de observar a tendencia da evolucao do Covid19 nos estados.
+                O grafico apresenta a ",tags$a(href="https://pt.wikipedia.org/wiki/M%C3%A9dia_m%C3%B3vel","media movel") ," do numero de casos novos nos ultimos 7 dias. 
+                Um pico pode ser identificado ao se ter uma linha onde a cor mude de claro para escuro e 
+                depois clareie novamente."
+              )
+            ),
+            br(),
             plotly::plotlyOutput(outputId = ns("death_rate_over_time_states"),height = "650") %>%
               shinycssloaders::withSpinner(color = loader_color)
           )
@@ -171,9 +187,11 @@ mod_Brazil_Monitor_server <- function(input, output, session){
       df_covid19 = covid19_br_data
     )
   })
-
-  #16-23
-  #24-lenght(estados)
+  
+  output$heatmap_mavg_new_cases <- echarts4r::renderEcharts4r({
+    heatmap_mavg_states(df = covid19_br_data)
+  })
+  
   # Within State ------------------------------------------------------------
   output$selected_state <- renderUI({
     selectInput(

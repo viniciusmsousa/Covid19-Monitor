@@ -3,7 +3,7 @@
 #' @param df Data Frame. Output from function getBrazilCovid19Data()
 #' @param selected_state String. Selected state (input$selected_state)
 #'
-#' @return
+#' @return DT::datatable()
 #' @export
 #'
 #' @import dplyr

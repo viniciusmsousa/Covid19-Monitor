@@ -4,12 +4,15 @@
 \alias{cities_with_deaths_data_table}
 \title{Datatable with Cities where Deaths were registered}
 \usage{
-cities_with_deaths_data_table(df, state)
+cities_with_deaths_data_table(df, selected_state)
 }
 \arguments{
 \item{df}{Data Frame. Output from function getBrazilCovid19Data()}
 
-\item{state}{String. Selected state (input$selected_state)}
+\item{selected_state}{String. Selected state (input$selected_state)}
+}
+\value{
+DT::datatable()
 }
 \description{
 Datatable with Cities where Deaths were registered
