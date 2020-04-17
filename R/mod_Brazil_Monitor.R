@@ -205,7 +205,9 @@ mod_Brazil_Monitor_server <- function(input, output, session){
   })
   
   output$confirmed_cases_state <- shinydashboard::renderValueBox({
-    
+    validate(
+      need(!is.null(input$selected_state),"")
+    )
     value <- covid19_br_data %>%
       filter(
         place_type=="state",
@@ -222,6 +224,9 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     )
   })
   output$deaths_state <- shinydashboard::renderValueBox({
+    validate(
+      need(!is.null(input$selected_state),"")
+    )
     
     value <- covid19_br_data %>%
       filter(
@@ -239,7 +244,9 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     )
   })
   output$death_rate_state <- shinydashboard::renderValueBox({
-    
+    validate(
+      need(!is.null(input$selected_state),"")
+    )
     value <- covid19_br_data %>%
       filter(
         place_type=="state",
@@ -265,6 +272,9 @@ mod_Brazil_Monitor_server <- function(input, output, session){
     )
   })
   output$table_cities_with_deaths <- DT::renderDataTable({
+    validate(
+      need(!is.null(input$selected_state),"")
+    )
     cities_with_deaths_data_table(
       df = covid19_br_data,
       selected_state = input$selected_state
